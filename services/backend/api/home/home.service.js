@@ -96,18 +96,32 @@ module.exports = {
         try {
 
             let filterCondition = ``;
+            let dateDifference = 0
 
             if (data.FromDate && data.ToDate) {
-                filterCondition += ` AND CAST(WH.DateTime AS DATE) BETWEEN '${data.FromDate}' AND '${data.ToDate}' `;
+
+                const fromDate = moment(data.FromDate);
+                const toDate = moment(data.ToDate);
+                dateDifference = toDate.diff(fromDate, 'days');
+                if (dateDifference > 30) {
+                    filterCondition += ` AND CAST(WH.DateTime AS DATE) BETWEEN '${data.FromDate}' AND '${data.ToDate}' `;
+                }
             }
 
             const result = await knex.raw(`
                 SELECT WH.* FROM ${TABLE_NAME.WeatherHistory} WH WHERE 1=1 
                 ${filterCondition}
                 ORDER BY DateTime DESC `)
+            
+            isSuccess = true;
+
+            if (dateDifference < 30) {
+                isSuccess = false;
+            }
 
             resObj.data = result[0]
-            isSuccess = true;
+            resObj.message = 'Date range shoud not be under 30 days.'
+            
             
         }catch(error){
             console.log(error);

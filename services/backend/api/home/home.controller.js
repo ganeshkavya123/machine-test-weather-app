@@ -76,7 +76,7 @@ module.exports={
             }else{
                 return res.json({
                     status: API_RESPONSE_STATUS_CODE.FAILED,
-                    message: API_RESPONSE_MESSAGES.SERVER_ERROR,
+                    message: result.message,
                     data: [],
                   });
             }

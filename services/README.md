@@ -20,3 +20,7 @@ API documentation is available at:
 
 `/api-docs`
 
+## Open Whether Api
+Open weather APIs available at:
+`https://openweathermap.org/current`
+
